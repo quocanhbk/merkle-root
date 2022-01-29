@@ -35,7 +35,10 @@ const convertFile = async (file: File) => {
     return { data, types }
 }
 
-export const makeMerkleTree = async (file: File, options: { floatToBN: boolean } = { floatToBN: true }) => {
+export const makeMerkleTree = async (
+    file: File,
+    options: { floatToBN?: boolean; exportFileName: string } = { floatToBN: true, exportFileName: "export" }
+) => {
     const { data, types } = await convertFile(file)
     const { keccak256: etherKeccak, defaultAbiCoder } = ethers.utils
 
@@ -66,24 +69,23 @@ export const makeMerkleTree = async (file: File, options: { floatToBN: boolean }
         merkleRoot: tree.getHexRoot(),
         data: tokensWithProof,
     }
-    exportToJson(result)
+    exportToJson(result, options.exportFileName)
 }
 
 export const verifyProof = (root: string, proofs: string[], data: string, types: string[]) => {
     const { keccak256: etherKeccak, defaultAbiCoder } = ethers.utils
     let computedHash = etherKeccak(defaultAbiCoder.encode(types, Object.values(JSON.parse(data))))
     proofs.forEach(proof => {
-        computedHash =
-            computedHash < proof
-                ? etherKeccak(computedHash + proof.substring(2))
-                : etherKeccak(proof + computedHash.substring(2))
+        computedHash = etherKeccak(
+            computedHash < proof ? computedHash + proof.substring(2) : proof + computedHash.substring(2)
+        )
     })
 
     return computedHash === root
 }
 
-const exportToJson = (objectData: any) => {
-    let filename = "export.json"
+const exportToJson = (objectData: any, fileName = "export") => {
+    let filename = `${fileName || "export"}.json`
     let contentType = "application/json;charset=utf-8;"
 
     const a = document.createElement("a")

@@ -9,12 +9,13 @@ const useGenerator = () => {
         position: "bottom",
     })
     const [file, setFile] = useState<File | null>(null)
+    const [exportFileName, setExportFileName] = useState("export")
     const [convertFloatToBN, setConvertFloatToBN] = useState(true)
 
     const process = async () => {
         if (!file) return
         try {
-            await makeMerkleTree(file)
+            await makeMerkleTree(file, { exportFileName, floatToBN: convertFloatToBN })
             setFile(null)
         } catch (error: any) {
             toast({
@@ -31,6 +32,8 @@ const useGenerator = () => {
         process,
         convertFloatToBN,
         setConvertFloatToBN,
+        exportFileName,
+        setExportFileName,
     }
 }
 

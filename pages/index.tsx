@@ -7,7 +7,8 @@ import useGenerator from "../hooks/useGenerator"
 import useVerify from "../hooks/useVerify"
 
 const Home: NextPage = () => {
-    const { file, setFile, process, convertFloatToBN, setConvertFloatToBN } = useGenerator()
+    const { file, setFile, process, convertFloatToBN, setConvertFloatToBN, exportFileName, setExportFileName } =
+        useGenerator()
     const { values, setValue, isDisabled, isValid, handleVerify } = useVerify()
 
     const prettifyJSON = (json: string) => {
@@ -44,6 +45,9 @@ const Home: NextPage = () => {
                             </Tooltip>
                         </Flex>
                     </Checkbox>
+                </FormControl>
+                <FormControl label="Export file name">
+                    <Input value={exportFileName} onChange={e => setExportFileName(e.target.value)} />
                 </FormControl>
                 <Button colorScheme={"green"} w="full" mt={4} onClick={process} isDisabled={!file}>
                     Process
@@ -85,7 +89,7 @@ const Home: NextPage = () => {
                             "0x615122da60fe4d194aaa03214a72d159dacf359d88e6041e33218fad908cda30",
                             "0x97a694534f1efe9c8b66479aebbc034018bb05e2faceccd398901421d589c935"
                         ]`)}`}
-                        h="10rem"
+                        h="8rem"
                     />
                 </FormControl>
                 <FormControl label="Data">
@@ -101,6 +105,7 @@ const Home: NextPage = () => {
                             "publicAddress": "0x7Af6f70217108AfE82983145db6B4F82C8Ef598F",
                             "amount": "100000000000000000000"
                           }`)}`}
+                        h="8rem"
                     />
                 </FormControl>
                 <FormControl label="Type of each data attribute (separated by comma)">
