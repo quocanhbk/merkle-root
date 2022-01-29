@@ -31,7 +31,6 @@ const convertFile = async (file: File) => {
             throw new Error(`Attribute ${key}'s type not found! Please specify type of ${key} in types sheet.`)
         }
     })
-
     return { data, types }
 }
 
@@ -46,8 +45,10 @@ export const makeMerkleTree = async (
         etherKeccak(
             defaultAbiCoder.encode(
                 types.map(type => type.type),
-                Object.values(row).map((value: any) =>
-                    parseFloat(value) > 0 && options.floatToBN ? etherToWei(value.toString()) : value
+                Object.values(row).map((value: any, index) =>
+                    parseFloat(value) > 0 && options.floatToBN && types[index].isETH
+                        ? etherToWei(value.toString())
+                        : value
                 )
             )
         )
@@ -59,9 +60,9 @@ export const makeMerkleTree = async (
         leaf: leaves[index],
         index,
         ...Object.fromEntries(
-            Object.entries(row).map(([key, value]: any) => [
+            Object.entries(row).map(([key, value]: any, idx) => [
                 key,
-                parseFloat(value) > 0 && options.floatToBN ? etherToWei(value.toString()) : value,
+                parseFloat(value) > 0 && options.floatToBN && types[idx].isETH ? etherToWei(value.toString()) : value,
             ])
         ),
     }))
@@ -72,9 +73,14 @@ export const makeMerkleTree = async (
     exportToJson(result, options.exportFileName)
 }
 
-export const verifyProof = (root: string, proofs: string[], data: string, types: string[]) => {
+export const verifyProof = (root: string, proofs: string[], rawData: string, types: string[]) => {
+    const data = JSON.parse(rawData)
+    if (Object.keys(data).length !== types.length) {
+        throw new Error("Data and types is inconsistent")
+    }
+
     const { keccak256: etherKeccak, defaultAbiCoder } = ethers.utils
-    let computedHash = etherKeccak(defaultAbiCoder.encode(types, Object.values(JSON.parse(data))))
+    let computedHash = etherKeccak(defaultAbiCoder.encode(types, Object.values(data)))
     proofs.forEach(proof => {
         computedHash = etherKeccak(
             computedHash < proof ? computedHash + proof.substring(2) : proof + computedHash.substring(2)
