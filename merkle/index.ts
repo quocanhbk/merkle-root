@@ -13,7 +13,7 @@ const convertFile = async (file: File) => {
 
     // workbook must have data sheet and types sheet
     if (!workbook.SheetNames.includes("data") || !workbook.SheetNames.includes("types")) {
-        throw new Error("Workbook must have data and types sheet")
+        throw new Error("Workbook must have data and types sheet. Please follow the example.")
     }
 
     const data: Record<string, any>[] = xlsx.utils.sheet_to_json(workbook.Sheets["data"])
