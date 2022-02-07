@@ -1,6 +1,5 @@
-import { toast, useToast } from "@chakra-ui/react"
+import { useToast } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { useMutation } from "react-query"
 import { verifyProof } from "../merkle"
 import useFormCore from "./useFormCore"
 

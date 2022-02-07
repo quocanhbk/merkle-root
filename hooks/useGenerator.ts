@@ -1,6 +1,5 @@
 import { useToast } from "@chakra-ui/react"
 import { useState } from "react"
-import { ethers } from "ethers"
 import { makeMerkleTree } from "../merkle"
 
 const useGenerator = () => {

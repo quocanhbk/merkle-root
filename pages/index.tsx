@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, Flex, Heading, Input, Stack, Text, Textarea, Tooltip } from "@chakra-ui/react"
 import type { NextPage } from "next"
-import { BsInfo, BsInfoCircleFill } from "react-icons/bs"
+import { BsInfoCircleFill } from "react-icons/bs"
 import { UploadInput } from "../components"
 import FormControl from "../components/FormControl"
 import useGenerator from "../hooks/useGenerator"
