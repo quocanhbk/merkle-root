@@ -38,7 +38,7 @@ const Home: NextPage = () => {
                     >
                         <Flex align="center">
                             Convert ETH to Wei
-                            <Tooltip label="Assume any number detected to be ETH, convert it to Wei">
+                            <Tooltip label="Convert ETH type to wei in exported file">
                                 <Box ml={2}>
                                     <BsInfoCircleFill />
                                 </Box>
